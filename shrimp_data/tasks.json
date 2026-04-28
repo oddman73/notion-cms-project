@@ -1,0 +1,449 @@
+{
+  "tasks": [
+    {
+      "id": "51676a79-de66-48e5-be7d-7bc9907f0c1e",
+      "name": "[P1-1] 환경 변수 파일 생성",
+      "description": ".env.local에 NOTION_API_KEY, NOTION_DATABASE_ID 키 설정. .env.example에 키 이름만 작성(값 없음). .gitignore에 .env*.local 포함 확인.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": ".env.local",
+          "type": "CREATE",
+          "description": "실제 API 키 저장 (gitignore 대상)"
+        },
+        {
+          "path": ".env.example",
+          "type": "CREATE",
+          "description": "키 구조 템플릿 (커밋 대상)"
+        },
+        {
+          "path": ".gitignore",
+          "type": "TO_MODIFY",
+          "description": ".env*.local 패턴 추가"
+        }
+      ],
+      "implementationGuide": "CREATE .env.local: NOTION_API_KEY=, NOTION_DATABASE_ID=\nCREATE .env.example: 동일 키, 값은 빈 문자열\nREFERENCE .gitignore: .env*.local 패턴 포함 여부 확인, 없으면 추가",
+      "verificationCriteria": ".env.local에 두 키 존재, .env.example에 키 이름만 존재(값 없음), .gitignore가 .env.local 제외",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "cbed4074-5c63-462a-89b2-982a801512bc",
+      "name": "[P1-2] @notionhq/client 패키지 설치",
+      "description": "Notion 공식 JavaScript SDK 설치. TypeScript 타입 내장 포함.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "51676a79-de66-48e5-be7d-7bc9907f0c1e"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "package.json",
+          "type": "TO_MODIFY",
+          "description": "@notionhq/client 의존성 추가"
+        },
+        {
+          "path": "package-lock.json",
+          "type": "TO_MODIFY",
+          "description": "lock 파일 자동 업데이트"
+        }
+      ],
+      "implementationGuide": "npm install @notionhq/client\npackage.json dependencies에 추가 확인\n설치 후 import { Client } from '@notionhq/client' 오류 없음 확인",
+      "verificationCriteria": "package.json dependencies에 @notionhq/client 존재, TypeScript import 오류 없음",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "995e73a3-d2f7-4856-b01c-1d11b8eb98ed",
+      "name": "[P1-3] 영화 상세·위시리스트 라우트 골격 생성",
+      "description": "app/movies/[id]/page.tsx, app/watchlist/page.tsx를 빈 Server Component로 생성. 향후 구현을 위한 라우트 구조만 확보.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cbed4074-5c63-462a-89b2-982a801512bc"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/movies/[id]/page.tsx",
+          "type": "CREATE",
+          "description": "영화 상세 페이지 라우트"
+        },
+        {
+          "path": "app/watchlist/page.tsx",
+          "type": "CREATE",
+          "description": "위시리스트 페이지 라우트"
+        }
+      ],
+      "implementationGuide": "CREATE app/movies/[id]/page.tsx: export default async function MovieDetailPage() { return <div /> }\nCREATE app/watchlist/page.tsx: export default async function WatchlistPage() { return <div /> }\n두 파일 모두 'use client' 없이 Server Component로 작성",
+      "verificationCriteria": "npm run dev에서 /movies/test, /watchlist 경로 접근 시 404 없이 빈 페이지 렌더링",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "4edddf63-4ecf-4e14-a522-243a812a7e94",
+      "name": "[P1-4] 씨네로그 브랜드 메타데이터 + Header 업데이트",
+      "description": "app/layout.tsx의 metadata를 씨네로그 브랜드로 변경. components/layout/header.tsx 로고명·링크 업데이트.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "995e73a3-d2f7-4856-b01c-1d11b8eb98ed"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/layout.tsx",
+          "type": "TO_MODIFY",
+          "description": "metadata title/description 변경",
+          "lineStart": 18,
+          "lineEnd": 23
+        },
+        {
+          "path": "components/layout/header.tsx",
+          "type": "TO_MODIFY",
+          "description": "로고 브랜드 + 네비 업데이트"
+        }
+      ],
+      "implementationGuide": "MODIFY app/layout.tsx: title='씨네로그', description='Notion으로 관리하는 나의 영화 감상 기록'\nMODIFY components/layout/header.tsx: 로고 텍스트 '씨네로그', 기존 StarterKit 네비 링크 제거, href='/' 만 유지",
+      "verificationCriteria": "브라우저 탭에 '씨네로그' 표시, 헤더에 씨네로그 로고 확인, 기존 StarterKit 텍스트 없음",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "f7e52f4c-7671-4b8e-bc4f-55651b5fbdcb",
+      "name": "[P2-1] lib/notion.ts — Notion API 레이어 구현",
+      "description": "Movie 인터페이스 정의, NotionClient 싱글톤, getMovies(), getMovieById(), toMovie() 변환 헬퍼 구현. 모든 Notion 접근의 유일한 진입점.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cbed4074-5c63-462a-89b2-982a801512bc"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion.ts",
+          "type": "CREATE",
+          "description": "Notion API 단일 접근 레이어"
+        },
+        {
+          "path": ".env.local",
+          "type": "DEPENDENCY",
+          "description": "NOTION_API_KEY, NOTION_DATABASE_ID 참조"
+        },
+        {
+          "path": "docs/PRD.md",
+          "type": "REFERENCE",
+          "description": "Notion DB 필드 정의 참조"
+        }
+      ],
+      "implementationGuide": "CREATE lib/notion.ts:\n1. const notion = new Client({ auth: process.env.NOTION_API_KEY })\n2. interface Movie { id, title, posterUrl, genre[], rating, watchedAt, status, review, director, releaseYear }\n3. type MovieStatus = '봤다' | '보는 중' | '보고 싶다'\n4. getMovies(): notion.databases.query({ database_id, filter: published=true, page_size: 50 }) → Movie[]\n5. getMovieById(id): notion.pages.retrieve({ page_id: id }) → Movie\n6. toMovie(page): Notion Page 속성 → Movie 타입 변환. any 금지, 각 속성 타입 명시적 추출",
+      "verificationCriteria": "TypeScript strict 컴파일 오류 없음, any 타입 미사용, getMovies() 호출 시 Movie[] 반환",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "0c3e9bbb-6e83-4f4e-b4e0-3e68e71370e9",
+      "name": "[P2-2] lib/utils.ts 유틸 함수 추가",
+      "description": "ratingToStars(rating: number): string, formatDate(dateStr: string): string 함수를 기존 cn() 유지하며 추가.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "f7e52f4c-7671-4b8e-bc4f-55651b5fbdcb"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "lib/utils.ts",
+          "type": "TO_MODIFY",
+          "description": "유틸 함수 2개 추가"
+        }
+      ],
+      "implementationGuide": "MODIFY lib/utils.ts:\n1. ratingToStars(rating): Math.round(rating)개의 ★ + (5-개수)개의 ☆ 반환. 예: 3.5 → '★★★★☆'\n2. formatDate(dateStr): new Date(dateStr).toLocaleDateString('ko-KR', ...) → 'YYYY.MM.DD' 형태\n기존 cn() 함수 그대로 유지",
+      "verificationCriteria": "ratingToStars(4) → '★★★★☆', ratingToStars(0) → '☆☆☆☆☆', formatDate('2024-01-15') → '2024.01.15', TypeScript strict 통과",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "0d795bc5-120c-45e2-b40b-fdee6173874a",
+      "name": "[P2-3] components/movie/ 공통 컴포넌트 구현",
+      "description": "MovieCard, StarRating, GenreBadge, MovieCardSkeleton 4개 컴포넌트 생성. 기존 shadcn Card, Badge 재사용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "0c3e9bbb-6e83-4f4e-b4e0-3e68e71370e9"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "components/movie/movie-card.tsx",
+          "type": "CREATE",
+          "description": "영화 카드 컴포넌트"
+        },
+        {
+          "path": "components/movie/star-rating.tsx",
+          "type": "CREATE",
+          "description": "별점 시각화"
+        },
+        {
+          "path": "components/movie/genre-badge.tsx",
+          "type": "CREATE",
+          "description": "장르 뱃지"
+        },
+        {
+          "path": "components/movie/movie-card-skeleton.tsx",
+          "type": "CREATE",
+          "description": "로딩 스켈레톤"
+        },
+        {
+          "path": "components/ui/badge.tsx",
+          "type": "DEPENDENCY",
+          "description": "재사용"
+        },
+        {
+          "path": "components/ui/card.tsx",
+          "type": "DEPENDENCY",
+          "description": "재사용"
+        }
+      ],
+      "implementationGuide": "CREATE components/movie/movie-card.tsx: Movie props 수신, Card 컴포넌트 래핑, 포스터·제목·평점·관람일 표시\nCREATE components/movie/star-rating.tsx: rating prop → ratingToStars() 호출 표시\nCREATE components/movie/genre-badge.tsx: genre[] → Badge 컴포넌트 map 렌더링. import Badge from '@/components/ui/badge'\nCREATE components/movie/movie-card-skeleton.tsx: animate-pulse, Card 구조 동일 높이 유지\n모두 named export, kebab-case 파일명, @/* 절대경로",
+      "verificationCriteria": "TypeScript strict 통과, 4개 컴포넌트 import 오류 없음, 스켈레톤 animate-pulse 동작",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "60f88873-6dd5-45e3-82b2-73af7e359f18",
+      "name": "[P3-1] 메인 페이지 — 카드 그리드 + 장르 필터 구현",
+      "description": "app/page.tsx를 Server Component로 구현. getMovies() 호출, 3열 반응형 그리드, 클라이언트 사이드 GenreFilter 컴포넌트.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "0d795bc5-120c-45e2-b40b-fdee6173874a"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "메인 페이지 Server Component"
+        },
+        {
+          "path": "components/movie/genre-filter.tsx",
+          "type": "CREATE",
+          "description": "클라이언트 장르 필터"
+        }
+      ],
+      "implementationGuide": "MODIFY app/page.tsx:\n  export const revalidate = 3600\n  async Server Component: const movies = await getMovies()\n  장르 목록 추출: [...new Set(movies.flatMap(m => m.genre))]\n  <Suspense fallback={<MovieCardSkeleton />} /> 래핑\n  3열 그리드: grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\nCREATE components/movie/genre-filter.tsx:\n  'use client'\n  useState<string>('전체')\n  장르 탭 버튼, 선택 장르 기준 movies 필터링\n  필터링된 목록을 props로 받거나 URL searchParams 방식 중 선택",
+      "verificationCriteria": "/ 에서 Notion 영화 카드 그리드 렌더링, 장르 클릭 시 필터링 동작, revalidate=3600 적용",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "9aa6820c-0ed2-42ab-b350-470952e0c7ed",
+      "name": "[P3-2] 영화 상세 페이지 구현",
+      "description": "app/movies/[id]/page.tsx — generateStaticParams, generateMetadata, 좌(포스터)/우(메타) 레이아웃 구현.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "60f88873-6dd5-45e3-82b2-73af7e359f18"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/movies/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "상세 페이지 구현"
+        },
+        {
+          "path": "lib/notion.ts",
+          "type": "DEPENDENCY",
+          "description": "getMovieById 사용"
+        }
+      ],
+      "implementationGuide": "MODIFY app/movies/[id]/page.tsx:\n  export const revalidate = 3600\n  generateStaticParams(): getMovies() → id 목록 반환\n  generateMetadata({ params }): getMovieById(id) → title, description, openGraph\n  Page Component: getMovieById(params.id) 호출\n  레이아웃: flex, 좌측 포스터(img), 우측 제목·감독·개봉연도·GenreBadge·StarRating·감상평\n  notFound() 호출: 영화 미존재 시",
+      "verificationCriteria": "/movies/{id} 접근 시 상세 정보 렌더링, og 메타태그 확인, 없는 id → 404 처리",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "2157bbc5-58f1-4f09-a285-e0bc4cc68e03",
+      "name": "[P4-1] 위시리스트 페이지 구현",
+      "description": "app/watchlist/page.tsx — status 기준 탭 필터(보고싶다/보는중/봤다). npx shadcn add tabs 선행 실행 필요.",
+      "notes": "npx shadcn add tabs 실행 전 components/ui/tabs.tsx 존재 여부 확인. 이미 있으면 재설치 불필요.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "9aa6820c-0ed2-42ab-b350-470952e0c7ed"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/watchlist/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "위시리스트 페이지"
+        },
+        {
+          "path": "components/ui/tabs.tsx",
+          "type": "DEPENDENCY",
+          "description": "npx shadcn add tabs로 생성"
+        }
+      ],
+      "implementationGuide": "먼저 npx shadcn add tabs 실행 → components/ui/tabs.tsx 생성 확인\nMODIFY app/watchlist/page.tsx:\n  export const revalidate = 3600\n  getMovies() 전체 조회 후 status 기준 그룹핑\n  shadcn <Tabs>, <TabsList>, <TabsTrigger>, <TabsContent> 사용\n  각 탭: 리스트 형태(썸네일+제목+장르뱃지)",
+      "verificationCriteria": "/watchlist에서 3개 탭 렌더링, 탭 전환 시 status 기준 필터링 동작",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "38427518-a348-4606-8c63-73d779e1c936",
+      "name": "[P4-2] Header 위시리스트 링크 추가 + 에러 페이지",
+      "description": "Header에 /watchlist 링크 추가. app/not-found.tsx, app/error.tsx 커스텀 에러 페이지 구현.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2157bbc5-58f1-4f09-a285-e0bc4cc68e03"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "components/layout/header.tsx",
+          "type": "TO_MODIFY",
+          "description": "위시리스트 링크 추가"
+        },
+        {
+          "path": "app/not-found.tsx",
+          "type": "CREATE",
+          "description": "커스텀 404 페이지"
+        },
+        {
+          "path": "app/error.tsx",
+          "type": "CREATE",
+          "description": "에러 바운더리 페이지"
+        }
+      ],
+      "implementationGuide": "MODIFY components/layout/header.tsx: nav에 <Link href='/watchlist'>위시리스트</Link> 추가\nCREATE app/not-found.tsx: 씨네로그 스타일 404 UI, 홈으로 돌아가기 버튼(Button 컴포넌트)\nCREATE app/error.tsx: 'use client' 필수, ({ error, reset }) props, 재시도 버튼 포함",
+      "verificationCriteria": "헤더에 위시리스트 링크 표시, /없는경로 → 커스텀 404, 에러 시 error.tsx 렌더링",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "47fd5e85-95d9-4db1-bc8c-b5b6c7f94ccf",
+      "name": "[P5-1] next/image 포스터 최적화 + next.config.ts",
+      "description": "MovieCard의 img를 next/image로 교체. next.config.ts 생성 및 Notion 이미지 도메인 remotePatterns 설정.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "38427518-a348-4606-8c63-73d779e1c936"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "next.config.ts",
+          "type": "CREATE",
+          "description": "Next.js 설정 (이미지 도메인 허용)"
+        },
+        {
+          "path": "components/movie/movie-card.tsx",
+          "type": "TO_MODIFY",
+          "description": "next/image 적용"
+        }
+      ],
+      "implementationGuide": "CREATE next.config.ts:\n  images: { remotePatterns: [{ protocol: 'https', hostname: '*.notion.so' }, { protocol: 'https', hostname: 'prod-files-secure.s3.us-west-2.amazonaws.com' }] }\nMODIFY components/movie/movie-card.tsx:\n  <img> → <Image from 'next/image'\n  width, height, alt 필수 지정\n  sizes 속성으로 반응형 최적화",
+      "verificationCriteria": "npm run build 이미지 도메인 오류 없음, 포스터 next/image 렌더링 확인",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "6dd665a7-f3e1-453a-a2c7-3a5d2060fe42",
+      "name": "[P5-2] SEO 완성 — generateMetadata + sitemap.ts",
+      "description": "상세 페이지 generateMetadata에 openGraph.images 추가. app/sitemap.ts 생성.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "47fd5e85-95d9-4db1-bc8c-b5b6c7f94ccf"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/movies/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "generateMetadata openGraph 보완"
+        },
+        {
+          "path": "app/sitemap.ts",
+          "type": "CREATE",
+          "description": "사이트맵 자동 생성"
+        }
+      ],
+      "implementationGuide": "MODIFY app/movies/[id]/page.tsx generateMetadata:\n  openGraph: { title, description, images: [{ url: movie.posterUrl }] }\nCREATE app/sitemap.ts:\n  import { getMovies } from '@/lib/notion'\n  return movies.map(m => ({ url: '/movies/'+m.id, lastModified: new Date() }))",
+      "verificationCriteria": "/sitemap.xml 접근 시 영화 URL 목록 반환, og:image 메타태그 확인",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "3eb8dad2-d279-48d4-927c-cc576e630c32",
+      "name": "[P5-3] 성능 점검 및 코드 정리",
+      "description": "불필요한 'use client' 제거, Server Component 전환, npm run build 성공, Lighthouse 90+ 목표.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "6dd665a7-f3e1-453a-a2c7-3a5d2060fe42"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": "app/",
+          "type": "REFERENCE",
+          "description": "use client 전체 점검"
+        },
+        {
+          "path": "components/",
+          "type": "REFERENCE",
+          "description": "컴포넌트 Server/Client 분류"
+        }
+      ],
+      "implementationGuide": "각 컴포넌트 'use client' 필요성 재검토:\n  useState/useEffect/이벤트 핸들러 없으면 Server Component로 전환\nnpm run build 실행 → 오류 수정\nnpm run lint 실행 → ESLint 오류 수정\nLighthouse 실행(Chrome DevTools) → 성능·접근성·SEO 점수 확인\n이미지 alt 텍스트 전체 점검",
+      "verificationCriteria": "npm run build 성공, npm run lint 통과, Lighthouse 성능 90+",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    },
+    {
+      "id": "0c50681e-047f-48e2-b3de-81f5fb6c54dd",
+      "name": "[P5-4] Vercel 프로덕션 배포",
+      "description": "Vercel 환경 변수 등록 및 프로덕션 배포. 도메인 설정.",
+      "notes": "Vercel 환경 변수는 .env.example을 참조. 민감한 키는 절대 코드에 포함하지 않음.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "3eb8dad2-d279-48d4-927c-cc576e630c32"
+        }
+      ],
+      "createdAt": "2026-04-28T08:28:43.582Z",
+      "updatedAt": "2026-04-28T08:28:43.582Z",
+      "relatedFiles": [
+        {
+          "path": ".env.example",
+          "type": "REFERENCE",
+          "description": "등록할 환경 변수 목록"
+        }
+      ],
+      "implementationGuide": "1. Vercel 대시보드 → 프로젝트 Settings → Environment Variables\n   NOTION_API_KEY, NOTION_DATABASE_ID 등록\n2. git push origin main → Vercel 자동 배포 트리거\n3. 프로덕션 URL에서 동작 확인\n4. ISR revalidate 동작 확인(Notion 데이터 수정 후 1시간 내 반영)",
+      "verificationCriteria": "프로덕션 URL에서 영화 목록 정상 렌더링, ISR 동작 확인, Vercel 빌드 로그 오류 없음",
+      "analysisResult": "ROADMAP.md 기반 씨네로그(Notion CMS Blog) 전체 개발. Phase 1→2→3→4→5 순서 엄수. 스택: Next.js 15 App Router, TypeScript strict, TailwindCSS v4, shadcn/ui, @notionhq/client, Vercel ISR. 핵심 원칙: lib/notion.ts 단일 접근, published=true 필터, revalidate=3600, any 타입 금지, next-themes 금지, tailwind.config.js 생성 금지."
+    }
+  ]
+}
